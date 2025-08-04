@@ -62,7 +62,11 @@ class User(AbstractUser):
 
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="orders",
+    )
 
     def __str__(self) -> str:
         return f"{self.created_at}"
@@ -114,7 +118,7 @@ class Ticket(models.Model):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["row", "seat", "movie_session_id"],
+                fields=["row", "seat", "movie_session"],
                 name="unique_ticket"
             )
         ]
